@@ -1,0 +1,110 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Funcionario {
+    private int numeroCracha;
+    private String nome;
+    private String setor;
+    private String funcao;
+
+    public Funcionario() {}
+
+    public Funcionario(int numeroCracha, String nome, String setor, String funcao) {
+        this.numeroCracha = numeroCracha;
+        this.nome = nome;
+        this.setor = setor;
+        this.funcao = funcao;
+    }
+
+    // Getters e setters aqui
+
+    public String imprimir() {
+        return "Número Crachá: " + numeroCracha + "\nNome: " + nome + "\nSetor: " + setor + "\nFunção: " + funcao;
+    }
+}
+
+class FuncionarioMensalista extends Funcionario {
+    private double salario;
+
+    public FuncionarioMensalista() {}
+
+    public FuncionarioMensalista(int numeroCracha, String nome, String setor, String funcao, double salario) {
+        super(numeroCracha, nome, setor, funcao);
+        this.salario = salario;
+    }
+
+    // Getters e setters aqui
+
+    @Override
+    public String imprimir() {
+        return super.imprimir() + "\nSalário: " + salario;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        ArrayList<Funcionario> funcionarios = new ArrayList<>();
+        Scanner scanner = new Scanner(System.in);
+
+        int opcao;
+        do {
+            System.out.println("Menu:");
+            System.out.println("1 - Inserir Funcionário");
+            System.out.println("2 - Exibir Funcionários");
+            System.out.println("3 - Sair");
+            System.out.print("Escolha uma opção: ");
+            opcao = scanner.nextInt();
+
+            switch (opcao) {
+                case 1:
+                    // Inserir Funcionário
+                    funcionarios.add(inserirFuncionario());
+                    break;
+                case 2:
+                    // Exibir Funcionários
+                    exibirFuncionarios(funcionarios);
+                    break;
+                case 3:
+                    // Sair
+                    System.out.println("Encerrando o programa.");
+                    break;
+                default:
+                    System.out.println("Opção inválida. Tente novamente.");
+            }
+        } while (opcao != 3);
+    }
+
+    public static Funcionario inserirFuncionario() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Número Crachá: ");
+        int numeroCracha = scanner.nextInt();
+        scanner.nextLine(); // Consumir a quebra de linha
+        System.out.print("Nome: ");
+        String nome = scanner.nextLine();
+        System.out.print("Setor: ");
+        String setor = scanner.nextLine();
+        System.out.print("Função: ");
+        String funcao = scanner.nextLine();
+        System.out.print("Salário (para funcionário mensalista, deixe em branco para outros): ");
+        double salario = 0.0;
+        String salarioInput = scanner.nextLine();
+        if (!salarioInput.isEmpty()) {
+            salario = Double.parseDouble(salarioInput);
+        }
+
+        Funcionario funcionario;
+        if (salario > 0) {
+            funcionario = new FuncionarioMensalista(numeroCracha, nome, setor, funcao, salario);
+        } else {
+            funcionario = new Funcionario(numeroCracha, nome, setor, funcao);
+        }
+
+        return funcionario;
+    }
+
+    public static void exibirFuncionarios(ArrayList<Funcionario> funcionarios) {
+        for (Funcionario funcionario : funcionarios) {
+            System.out.println(funcionario.imprimir());
+        }
+    }
+}
